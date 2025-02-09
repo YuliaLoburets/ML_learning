@@ -69,5 +69,9 @@ def preprocess_new_data(new_data: pd.DataFrame, input_cols: List[str], scaler: S
 
     X_numeric = scaler.transform(new_data[numeric_cols])
     X_categorical = encoder.transform(new_data[categorical_cols])
-
-    return np.hstack([X_numeric, X_categorical])
+    encoded_columns = encoder.get_feature_names_out(categorical_cols)
+    input_cols = numeric_cols + list(encoded_columns)
+                            
+    df = np.hstack([X_numeric, X_categorical])
+    preprocessed_data = pd.DataFrame(df, columns=input_cols)
+    return preprocessed_data
